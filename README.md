@@ -1,34 +1,55 @@
 # InvokeMatcher
 
-TODO: Delete this and the text below, and describe your gem
+This is adapted from: https://github.com/rspec/rspec-expectations/issues/934
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/invoke_matcher`. To experiment with that code, run `bin/console` for an interactive prompt.
+It allows us to write expectations in a more declarative way, by checking if a
+method was called on a class or instance.
+
+Old way:
+
+```ruby
+expect(foo).to receive(:method)
+subject
+```
+
+Or:
+```ruby
+subject
+expect(foo).to have_received(:method)
+```
+
+New way:
+```ruby
+expect { subject }.to invoke(:method).on(foo).with("bar")
+```
 
 ## Installation
+Add this to your test gems:
+```ruby
+group :test do
+  gem 'invoke_matcher'
+end
+```
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Make sure to require it in your `spec_helper.rb` or `rails_helper.rb`:
+```ruby
+require 'invoke_matcher'
 
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+RSpec.configure do |config|
+  config.include InvokeMatcher
+end
+```
 
 ## Usage
+```ruby
+expect { foo }.to invoke(:method).on(Class).and_call_original
 
-TODO: Write usage instructions here
+expect{ foo }.to change{ bar }.and not_invoke(:method).on(Class)
 
-## Development
+expect{ foo }.to invoke(:method).on(Class).at_least(3).times
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/invoke_matcher.
+expect { foo }.to invoke(:method).and_expect_return("bar")
+```
 
 ## License
 
