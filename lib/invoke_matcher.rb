@@ -9,6 +9,8 @@ module InvokeMatcher
     include RSpec::Mocks::ExampleMethods
     include RSpec::Matchers::Composable
 
+    def_delegators :have_received_matcher, :failure_message, :failure_message_when_negated
+
     attr_reader :have_received_matcher, :expected_recipient
 
     def initialize(expected_method)
@@ -80,7 +82,6 @@ module InvokeMatcher
       self
     end
 
-    def_delegators :have_received_matcher, :failure_message, :failure_message_when_negated
 
     def supports_block_expectations?
       true
