@@ -80,7 +80,7 @@ module InvokeMatcher
       self
     end
 
-    def_delegator :have_received_matcher, :failure_message, :failure_message_when_negated
+    def_delegators :have_received_matcher, :failure_message, :failure_message_when_negated
 
     def supports_block_expectations?
       true
