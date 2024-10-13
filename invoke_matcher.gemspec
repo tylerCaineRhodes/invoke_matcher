@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/tylerCaineRhodes/invoke_matcher"
   spec.files = Dir["lib/**/*.rb"]
-  gemspec = File.basename(__FILE__)
+  File.basename(__FILE__)
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]

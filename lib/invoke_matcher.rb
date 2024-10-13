@@ -1,34 +1,23 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+
 module InvokeMatcher
   class Matcher
-    include RSpec::Mocks::ExampleMethods
+    extend Forwardable
 
-    attr_reader :expected_method, :have_received_matcher, :expected_recipient, :expected_return_value
+    include RSpec::Mocks::ExampleMethods
+    include RSpec::Matchers::Composable
+
+    attr_reader :have_received_matcher, :expected_recipient
 
     def initialize(expected_method)
       @expected_method = expected_method
-      @have_received_matcher = RSpec::Mocks::Matchers::HaveReceived.new(expected_method)
-      @expected_recipient = nil
-      @expected_return_value = nil
+      @have_received_matcher = RSpec::Mocks::Matchers::HaveReceived.new(@expected_method)
     end
 
     def description
-      "invoke #{expected_method} on #{expected_recipient.inspect}"
-    end
-
-    def and_return(expected_value)
-      @expected_return_value = expected_value
-      self
-    end
-
-    def method_missing(name, *args, &block)
-      if respond_to_missing?(name)
-        @have_received_matcher = have_received_matcher.public_send(name, *args, &block)
-        self
-      else
-        super
-      end
+      "invoke #{@expected_method} on #{expected_recipient.inspect}"
     end
 
     def and_call_original
@@ -36,21 +25,40 @@ module InvokeMatcher
       self
     end
 
-    def call_original(matcher)
-      @call_original ? matcher.and_call_original : matcher
+    def method_missing(name, *, &block)
+      ensure_recipient_is_defined!
+      return super unless respond_to_missing?(name)
+
+      @have_received_matcher = have_received_matcher.public_send(name, *, &block)
+      self
     end
 
     def respond_to_missing?(name, include_private = false)
-      have_received_matcher.respond_to?(name, include_private)
+      @have_received_matcher.respond_to?(name, include_private)
     end
 
     def matches?(event_proc)
       ensure_recipient_is_defined!
       set_method_expectation
 
-      actual_return_value = event_proc.call
+      event_proc.call()
 
-      matches_result?(actual_return_value) && have_received_matcher.matches?(expected_recipient)
+
+      have_received_matcher.matches?(expected_recipient) && matches_result?
+    end
+
+    def set_method_expectation
+      return if testing_double?
+
+      @actual_result = expected_recipient.send(@expected_method)
+      expectation = allow(expected_recipient).to receive(@expected_method)
+      expectation.and_call_original if @call_original
+    end
+
+    def testing_double?
+      @expected_recipient.is_a?(RSpec::Mocks::Double) ||
+      @expected_recipient.is_a?(RSpec::Mocks::InstanceVerifyingDouble) ||
+      @expected_recipient.is_a?(RSpec::Mocks::ObjectVerifyingDouble)
     end
 
     def does_not_match?(event_proc)
@@ -67,16 +75,25 @@ module InvokeMatcher
       self
     end
 
-    def failure_message
-      have_received_matcher.failure_message
+    def with(*, **)
+      have_received_matcher.with(*, **)
+      self
     end
 
-    def failure_message_when_negated
-      have_received_matcher.failure_message_when_negated
-    end
+    def_delegator :have_received_matcher, :failure_message, :failure_message_when_negated
 
     def supports_block_expectations?
       true
+    end
+
+    def matches_result?
+      return true unless defined?(@expected_return_value)
+      values_match?(@expected_return_value, @actual_result)
+    end
+
+    def and_expect_return(expected_return_value)
+      @expected_return_value = expected_return_value
+      self
     end
 
     private
@@ -85,31 +102,13 @@ module InvokeMatcher
       raise ArgumentError, 'missing `on`' unless defined?(expected_recipient)
     end
 
-    def set_method_expectation
-      unless testing_double?
-        allow(expected_recipient).to receive(expected_method).and_return(@expected_return_value)
-      end
-    end
-
-    def testing_double?
-      expected_recipient.is_a?(RSpec::Mocks::Double) ||
-      expected_recipient.is_a?(RSpec::Mocks::InstanceVerifyingDouble) ||
-      expected_recipient.is_a?(RSpec::Mocks::ObjectVerifyingDouble)
-    end
-
-    def matches_result?(actual_return_value)
-      return true unless defined?(@expected_return_value)
-
-      values_match?(@expected_return_value, actual_return_value)
-    end
-
-    def values_match?(expected, actual)
-      expected == actual
+    def call_original(matcher)
+      @call_original ? matcher.and_call_original : matcher
     end
   end
 
   def invoke(expected_method)
-    Matcher.new(expected_method)
+    InvokeMatcher::Matcher.new(expected_method)
   end
 end
 
