@@ -8,7 +8,15 @@ method was called on a class or instance.
 Old way:
 
 ```ruby
-expect(foo).to receive(:method)
+allow(foo).to receive(:method).and_return('value')
+subject
+expect(foo).to have_received(:method)
+```
+
+Or:
+
+```ruby
+expect(foo).to receive(:method).and_return('value')
 subject
 ```
 
@@ -20,7 +28,7 @@ expect(foo).to have_received(:method)
 
 New way:
 ```ruby
-expect { subject }.to invoke(:method).on(foo).with("bar")
+expect { subject }.to invoke(:method).on(foo).with("bar").and_return("value")
 ```
 
 ## Installation
