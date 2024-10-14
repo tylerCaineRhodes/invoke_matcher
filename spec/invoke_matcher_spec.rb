@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe InvokeMatcher do
   let(:dummy_class) { Class.new { def something = "result" } }
   let(:dummy_instance) { dummy_class.new }
@@ -71,3 +72,4 @@ RSpec.describe InvokeMatcher do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

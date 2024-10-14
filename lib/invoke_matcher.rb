@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'forwardable'
+require "forwardable"
 
 module InvokeMatcher
   class Matcher
@@ -27,11 +27,11 @@ module InvokeMatcher
       self
     end
 
-    def method_missing(name, *, &block)
+    def method_missing(name, ...)
       ensure_recipient_is_defined!
       return super unless respond_to_missing?(name)
 
-      @have_received_matcher = have_received_matcher.public_send(name, *, &block)
+      @have_received_matcher = have_received_matcher.public_send(name, ...)
       self
     end
 
@@ -43,8 +43,7 @@ module InvokeMatcher
       ensure_recipient_is_defined!
       set_method_expectation
 
-      event_proc.call()
-
+      event_proc.call
 
       have_received_matcher.matches?(expected_recipient) && matches_result?
     end
@@ -59,8 +58,8 @@ module InvokeMatcher
 
     def testing_double?
       @expected_recipient.is_a?(RSpec::Mocks::Double) ||
-      @expected_recipient.is_a?(RSpec::Mocks::InstanceVerifyingDouble) ||
-      @expected_recipient.is_a?(RSpec::Mocks::ObjectVerifyingDouble)
+        @expected_recipient.is_a?(RSpec::Mocks::InstanceVerifyingDouble) ||
+        @expected_recipient.is_a?(RSpec::Mocks::ObjectVerifyingDouble)
     end
 
     def does_not_match?(event_proc)
@@ -77,11 +76,10 @@ module InvokeMatcher
       self
     end
 
-    def with(*, **)
-      have_received_matcher.with(*, **)
+    def with(*args, **kwargs)
+      have_received_matcher.with(*args, **kwargs)
       self
     end
-
 
     def supports_block_expectations?
       true
@@ -89,6 +87,7 @@ module InvokeMatcher
 
     def matches_result?
       return true unless defined?(@expected_return_value)
+
       values_match?(@expected_return_value, @actual_result)
     end
 
@@ -100,7 +99,7 @@ module InvokeMatcher
     private
 
     def ensure_recipient_is_defined!
-      raise ArgumentError, 'missing `on`' unless defined?(expected_recipient)
+      raise ArgumentError, "missing `on`" unless defined?(expected_recipient)
     end
 
     def call_original(matcher)

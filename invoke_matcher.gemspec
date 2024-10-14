@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/tylerCaineRhodes/invoke_matcher"
+  spec.metadata["rubygems_mfa_required"] = "true"
   spec.files = Dir["lib/**/*.rb"]
   File.basename(__FILE__)
   spec.bindir = "exe"

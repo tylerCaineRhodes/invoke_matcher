@@ -22,7 +22,7 @@ subject
 
 New way:
 ```ruby
-expect { subject }.to invoke(:method).on(foo).with("bar").and_return("value")
+expect { subject }.to invoke(:method).on(foo).with('bar').and_return('value')
 ```
 
 ## Installation
@@ -50,7 +50,7 @@ expect { foo }.to change{ bar }.and not_invoke(:method).on(Class)
 
 expect { foo }.to invoke(:method).on(Class).at_least(3).times
 
-expect { foo }.to invoke(:method).and_expect_return("bar")
+expect { foo }.to invoke(:method).and_expect_return('bar')
 ```
 
 ## License
