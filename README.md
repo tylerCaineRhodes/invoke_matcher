@@ -20,12 +20,6 @@ expect(foo).to receive(:method).and_return('value')
 subject
 ```
 
-Or:
-```ruby
-subject
-expect(foo).to have_received(:method)
-```
-
 New way:
 ```ruby
 expect { subject }.to invoke(:method).on(foo).with("bar").and_return("value")
@@ -52,9 +46,9 @@ end
 ```ruby
 expect { foo }.to invoke(:method).on(Class).and_call_original
 
-expect{ foo }.to change{ bar }.and not_invoke(:method).on(Class)
+expect { foo }.to change{ bar }.and not_invoke(:method).on(Class)
 
-expect{ foo }.to invoke(:method).on(Class).at_least(3).times
+expect { foo }.to invoke(:method).on(Class).at_least(3).times
 
 expect { foo }.to invoke(:method).and_expect_return("bar")
 ```
