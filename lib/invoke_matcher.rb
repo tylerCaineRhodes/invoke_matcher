@@ -45,16 +45,12 @@ module InvokeMatcher
 
       event_proc.call
 
-      have_received_matcher.matches?(expected_recipient) && matches_result?
+      have_received_matcher.matches?(expected_recipient)
     end
 
     def set_method_expectation
       expectation = allow(expected_recipient).to receive(@expected_method)
       expectation.and_call_original if @call_original
-      
-      if !testing_double? && defined?(@args) && defined?(@kwargs)
-        @actual_result = expected_recipient.send(@expected_method, *@args, **@kwargs)
-      end
     end
 
     def testing_double?
@@ -87,17 +83,6 @@ module InvokeMatcher
 
     def supports_block_expectations?
       true
-    end
-
-    def matches_result?
-      return true unless defined?(@expected_return_value)
-
-      values_match?(@expected_return_value, @actual_result)
-    end
-
-    def and_expect_return(expected_return_value)
-      @expected_return_value = expected_return_value
-      self
     end
 
     private
