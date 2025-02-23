@@ -21,12 +21,15 @@ subject
 ```
 
 New way:
+
 ```ruby
-expect { subject }.to invoke(:method).on(foo).with('bar').and_return('value')
+expect { subject }.to invoke(:method).on(foo).with('bar')
 ```
 
 ## Installation
+
 Add this to your test gems:
+
 ```ruby
 group :test do
   gem 'invoke_matcher'
@@ -34,6 +37,7 @@ end
 ```
 
 Make sure to require it in your `spec_helper.rb` or `rails_helper.rb`:
+
 ```ruby
 require 'invoke_matcher'
 
@@ -43,6 +47,7 @@ end
 ```
 
 ## Usage
+
 ```ruby
 expect { foo }.to invoke(:method).on(Class).and_call_original
 
