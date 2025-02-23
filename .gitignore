@@ -9,3 +9,11 @@
 
 # rspec failure tracking
 .rspec_status
+
+# Ignore gem builds
+*.gem
+
+# Ignore system-specific files
+.DS_Store
+.idea/
+.vscode/
