@@ -71,5 +71,51 @@ RSpec.describe InvokeMatcher do
         .at_least(3).times
     end
   end
+
+  context "when testing method arguments" do
+    let(:dummy_class) do
+      Class.new do
+        def greet(name, times: 1)
+          "Hello #{name}" * times
+        end
+      end
+    end
+
+    it "matches positional arguments" do
+      expect { dummy_instance.greet("Alice") }.to invoke(:greet)
+        .with("Alice")
+        .on(dummy_instance)
+    end
+
+    it "matches keyword arguments" do
+      expect { dummy_instance.greet("Bob", times: 2) }.to invoke(:greet)
+        .with("Bob", times: 2)
+        .on(dummy_instance)
+    end
+
+    it "fails when arguments don't match" do
+      expect do
+        expect { dummy_instance.greet("Alice", times: 1) }.to invoke(:greet)
+          .with("Bob", times: 2)
+          .on(dummy_instance)
+      end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
+    end
+
+    it "matches return value with arguments" do
+      expect { dummy_instance.greet("Alice", times: 2) }.to invoke(:greet)
+        .with("Alice", times: 2)
+        .on(dummy_instance)
+        .and_expect_return("Hello Alice" * 2)
+    end
+
+    it "fails when return value doesn't match" do
+      expect do
+        expect { dummy_instance.greet("Alice", times: 2) }.to invoke(:greet)
+          .with("Alice", times: 2)
+          .on(dummy_instance)
+          .and_expect_return("Wrong return value")
+      end.to raise_error(RSpec::Expectations::ExpectationNotMetError)
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength
