@@ -1,0 +1,26 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+InvokeMatcher	lib/invoke_matcher.rb	/^module InvokeMatcher$/;"	m
+InvokeMatcher	lib/invoke_matcher/version.rb	/^module InvokeMatcher$/;"	m
+Matcher	lib/invoke_matcher.rb	/^  class Matcher$/;"	c	class:InvokeMatcher
+and_call_original	lib/invoke_matcher.rb	/^    def and_call_original$/;"	f	class:InvokeMatcher.Matcher
+and_expect_return	lib/invoke_matcher.rb	/^    def and_expect_return(expected_return_value)$/;"	f	class:InvokeMatcher.Matcher
+call_original	lib/invoke_matcher.rb	/^    def call_original(matcher)$/;"	f	class:InvokeMatcher.Matcher
+description	lib/invoke_matcher.rb	/^    def description$/;"	f	class:InvokeMatcher.Matcher
+does_not_match?	lib/invoke_matcher.rb	/^    def does_not_match?(event_proc)$/;"	f	class:InvokeMatcher.Matcher
+ensure_recipient_is_defined!	lib/invoke_matcher.rb	/^    def ensure_recipient_is_defined!$/;"	f	class:InvokeMatcher.Matcher
+initialize	lib/invoke_matcher.rb	/^    def initialize(expected_method)$/;"	f	class:InvokeMatcher.Matcher
+invoke	lib/invoke_matcher.rb	/^  def invoke(expected_method)$/;"	f	class:InvokeMatcher
+matches?	lib/invoke_matcher.rb	/^    def matches?(event_proc)$/;"	f	class:InvokeMatcher.Matcher
+matches_result?	lib/invoke_matcher.rb	/^    def matches_result?$/;"	f	class:InvokeMatcher.Matcher
+method_missing	lib/invoke_matcher.rb	/^    def method_missing(name, ...)$/;"	f	class:InvokeMatcher.Matcher
+on	lib/invoke_matcher.rb	/^    def on(expected_recipient)$/;"	f	class:InvokeMatcher.Matcher
+respond_to_missing?	lib/invoke_matcher.rb	/^    def respond_to_missing?(name, include_private = false)$/;"	f	class:InvokeMatcher.Matcher
+set_method_expectation	lib/invoke_matcher.rb	/^    def set_method_expectation$/;"	f	class:InvokeMatcher.Matcher
+supports_block_expectations?	lib/invoke_matcher.rb	/^    def supports_block_expectations?$/;"	f	class:InvokeMatcher.Matcher
+testing_double?	lib/invoke_matcher.rb	/^    def testing_double?$/;"	f	class:InvokeMatcher.Matcher
+with	lib/invoke_matcher.rb	/^    def with(*args, **kwargs)$/;"	f	class:InvokeMatcher.Matcher
