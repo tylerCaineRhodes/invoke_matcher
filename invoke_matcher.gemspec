@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["rhodetyl000@gmail.com"]
 
   spec.summary = "RSpec matcher for testing method invocations"
+  spec.description = "A Ruby gem that provides RSpec matchers for verifying method invocations with specific arguments"
   spec.homepage = "https://github.com/tylerCaineRhodes/invoke_matcher"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.0.0"
@@ -16,8 +17,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/tylerCaineRhodes/invoke_matcher"
   spec.metadata["rubygems_mfa_required"] = "true"
-  spec.files = Dir["lib/**/*.rb"]
-  File.basename(__FILE__)
+  spec.files = Dir["lib/**/*.rb", "README.md", "LICENSE.txt"]
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]

@@ -49,11 +49,12 @@ module InvokeMatcher
     end
 
     def set_method_expectation
-      return if testing_double?
-
-      @actual_result = expected_recipient.send(@expected_method)
       expectation = allow(expected_recipient).to receive(@expected_method)
       expectation.and_call_original if @call_original
+      
+      if !testing_double? && defined?(@args) && defined?(@kwargs)
+        @actual_result = expected_recipient.send(@expected_method, *@args, **@kwargs)
+      end
     end
 
     def testing_double?
@@ -77,6 +78,9 @@ module InvokeMatcher
     end
 
     def with(*args, **kwargs)
+      @args = args
+      @kwargs = kwargs
+
       have_received_matcher.with(*args, **kwargs)
       self
     end
